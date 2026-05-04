@@ -24,6 +24,7 @@ Python, Streamlit, Pandas, NumPy, Scikit-learn, PyTorch / TensorFlow, Plotly
 
 ## 📂 Project Structure
 
+```
 Movie Recommendation System/
 ├── app.py
 ├── requirements.txt
@@ -38,7 +39,7 @@ Movie Recommendation System/
 │ └── helpers.py
 └── models/
 └── trained_model.pth
-
+```
 ---
 
 ## 📊 Dataset
