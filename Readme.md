@@ -1,10 +1,10 @@
-# 🎬 Hybrid AI Movie Recommendation System
+# Hybrid AI Movie Recommendation System
 
 An intelligent AI-based Movie Recommendation System that combines classical AI techniques (search algorithms, CSP, heuristics) with Machine Learning (K-Means + Neural Networks) and provides results through an interactive Streamlit dashboard.
 
 ---
 
-## 🚀 Features
+## Features
 
 - Constraint Satisfaction Problem (CSP) filtering  
 - Search Algorithms: BFS, DFS, A*  
@@ -16,13 +16,13 @@ An intelligent AI-based Movie Recommendation System that combines classical AI t
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-Python, Streamlit, Pandas, NumPy, Scikit-learn, PyTorch / TensorFlow, Plotly
+Python, Streamlit, Pandas, NumPy, Scikit-learn, PyTorch, Plotly
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 Movie Recommendation System/
@@ -42,7 +42,7 @@ Movie Recommendation System/
 ```
 ---
 
-## 📊 Dataset
+## Dataset
 
 Uses IMDb Top Movies dataset containing:
 - Movie Title  
@@ -56,7 +56,7 @@ Place dataset inside the `data/` folder.
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 git clone https://github.com/mirza1272/Movie-Recommendation-System.git  
 cd Movie-Recommendation-System  
@@ -68,13 +68,13 @@ pip install -r requirements.txt
 
 ---
 
-## ▶️ Run Project
+## Run Project
 
 streamlit run app.py  
 
 ---
 
-## 🧠 Working Flow
+## Working Flow
 
 1. User enters preferences (genre, year, rating, duration)  
 2. CSP filters valid movies  
@@ -86,7 +86,7 @@ streamlit run app.py
 
 ---
 
-## 📈 Output
+## Output
 
 - Top recommended movies  
 - Predicted ratings  
@@ -95,7 +95,7 @@ streamlit run app.py
 
 ---
 
-## 🎯 Future Improvements
+## Future Improvements
 
 - Add collaborative filtering  
 - Improve ANN accuracy  
@@ -104,13 +104,18 @@ streamlit run app.py
 
 ---
 
-## 👨‍💻 Author
 
-Haseeb Rahman  
-AI Lab Semester Project  
+## Author
+
+**Haseeb ur Rahman**  
+
+### Collaborators
+
+- Areeba Majeed
+- Maheen Fatima 
 
 ---
 
-## 📜 License
+## License
 
 For educational purposes only
