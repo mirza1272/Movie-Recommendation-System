@@ -1,13 +1,7 @@
-"""
-Hybrid AI Movie Recommendation System
-FAST-NUCES AI Lab Semester Project
-"""
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-
 from utils.helpers import load_data, get_all_genres
 from modules.csp import apply_csp
 from modules.heuristic import compute_heuristic
@@ -18,49 +12,37 @@ from modules.ml_model import (
 )
 import joblib
 import os
-
-# ─── Page Config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Hybrid AI Movie Recommender",
     page_icon="MR",
     layout="wide"
 )
-
 st.markdown("""
 <style>
     :root {
-        --bg-start: #07111f;
-        --bg-mid: #0f1b2d;
-        --bg-end: #16263b;
-        --panel: rgba(10, 18, 30, 0.78);
-        --panel-border: rgba(255, 255, 255, 0.08);
-        --text-main: #f4f7fb;
-        --text-sub: #b3bfd1;
-        --accent: #e85d04;
-        --accent-2: #ffb703;
+        --bg: #07111f;
+        --panel: #111d30;
+        --panel-border: #f2b134;
+        --text-main: #f6f7fb;
+        --text-sub: #c1c9d6;
+        --accent: #f2b134;
+        --accent-2: #d88f16;
     }
-
     .stApp {
-        background:
-            radial-gradient(circle at top left, rgba(232, 93, 4, 0.20), transparent 32%),
-            radial-gradient(circle at top right, rgba(255, 183, 3, 0.16), transparent 28%),
-            linear-gradient(135deg, var(--bg-start) 0%, var(--bg-mid) 48%, var(--bg-end) 100%);
+        background: var(--bg);
         color: var(--text-main);
     }
-
     section[data-testid="stSidebar"] {
-        background: rgba(5, 10, 18, 0.72);
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--panel);
+        border-right: 1px solid var(--panel-border);
     }
-
     section[data-testid="stSidebar"] .stMarkdown,
     section[data-testid="stSidebar"] label,
     section[data-testid="stSidebar"] p,
     section[data-testid="stSidebar"] span {
         color: var(--text-main) !important;
     }
-
-    .main-title { font-size: 2.2rem; font-weight: 700; color: #E50914; }
+    .main-title { font-size: 2.2rem; font-weight: 700; color: var(--accent); }
     .hero-title {
         font-size: 2.4rem;
         font-weight: 800;
@@ -75,7 +57,7 @@ st.markdown("""
         margin-bottom: 1.2rem;
     }
     .hero-panel {
-        background: linear-gradient(135deg, rgba(232, 93, 4, 0.16), rgba(255, 255, 255, 0.04));
+        background: var(--panel);
         border: 1px solid var(--panel-border);
         border-radius: 20px;
         padding: 1.4rem 1.5rem;
@@ -123,7 +105,7 @@ st.markdown("""
         border-left: 5px solid var(--accent);
     }
     .badge {
-        display: inline-block; background: #E50914; color: white;
+        display: inline-block; background: var(--accent); color: #07111f;
         border-radius: 6px; padding: 2px 8px; font-size: 0.8rem;
         margin-right: 4px;
     }
@@ -164,59 +146,50 @@ st.markdown("""
         margin-top: 0.2rem;
     }
     .stButton > button {
-        background: linear-gradient(135deg, #E50914, #ff7a18);
-        color: white;
-        border: none;
-        border-radius: 12px;
+        background: var(--panel);
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 16px;
         font-weight: 700;
         width: 100%;
-        padding: 0.72rem 1rem;
-        box-shadow: 0 10px 24px rgba(232, 93, 4, 0.25);
+        padding: 0.82rem 1rem;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
     }
     .stButton > button:hover {
-        border: none;
-        opacity: 0.95;
+        background: #15233a;
+        color: var(--accent);
+        border: 1px solid var(--accent-2);
+        transform: translateY(-1px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.30);
+    }
+    .stButton > button:active {
+        transform: translateY(0);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
     }
 </style>
 """, unsafe_allow_html=True)
-
-# ─── Load Data ──────────────────────────────────────────────────────────────────
 @st.cache_data
 def get_data():
     return load_data()
-
 df = get_data()
 all_genres = get_all_genres(df)
-
-# ─── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.image("https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg", width=120)
     st.markdown("## Filters")
-
     genre = st.selectbox("Genre", ["Any"] + all_genres)
-
     year_range = st.slider("Year Range", 1920, 2023, (1990, 2023))
-
     rating_min = st.slider("Minimum IMDB Rating", 1.0, 9.5, 7.0, step=0.1)
-
     duration_range = st.slider("Duration (min)", 60, 300, (90, 180))
-
     algorithm = st.selectbox("Search Algorithm", ["A*", "BFS", "DFS"])
-
     top_n = st.slider("Top N Results", 3, 10, 5)
-
     st.markdown("---")
-
-    # Train / Load Model
     if st.button("Train AI Model"):
         with st.spinner("Training ANN and K-Means..."):
             train_ann(df)
             train_kmeans(df)
         st.success("Model trained and saved successfully.")
-
     recommend_btn = st.button("Recommend Movies")
-
-# ─── Main Area ──────────────────────────────────────────────────────────────────
 st.markdown(
     '<div class="hero-panel">'
     '<div class="section-label">Hybrid recommendation dashboard</div>'
@@ -225,7 +198,6 @@ st.markdown(
     '</div>',
     unsafe_allow_html=True
 )
-
 hero_col1, hero_col2, hero_col3 = st.columns(3)
 with hero_col1:
     st.markdown(
@@ -242,12 +214,8 @@ with hero_col3:
         f'<div class="info-card"><div class="info-title">Rating average</div><div class="info-value">{df["IMDB_Rating"].mean():.2f}</div><div class="info-caption">Average IMDB score across the dataset</div></div>',
         unsafe_allow_html=True
     )
-
-# ─── Recommendation Pipeline ────────────────────────────────────────────────────
 if recommend_btn:
     with st.spinner("Running AI pipeline..."):
-
-        # Step 1: CSP Filtering
         csp_result = apply_csp(
             df,
             genre=genre,
@@ -257,19 +225,12 @@ if recommend_btn:
             duration_min=duration_range[0],
             duration_max=duration_range[1]
         )
-
         if csp_result.empty:
             st.warning("No movies matched your constraints. Try relaxing the filters.")
             st.stop()
-
-        # Step 2: Heuristic Scoring
         preferred_year = (year_range[0] + year_range[1]) // 2
         scored = compute_heuristic(csp_result, genre=genre, preferred_year=preferred_year)
-
-        # Step 3: Search Algorithm
         search_result = run_search(scored, algorithm=algorithm, top_n=min(50, len(scored)))
-
-        # Step 4: ML Predictions
         if is_trained():
             model, scaler = load_ann()
             predicted_ratings = predict_ratings(search_result, model, scaler)
@@ -278,25 +239,18 @@ if recommend_btn:
         else:
             search_result = search_result.copy()
             search_result["predicted_rating"] = search_result["IMDB_Rating"]
-
-        # Step 5: K-Means Clustering
         if os.path.exists(KMEANS_PATH):
             kmeans = joblib.load(KMEANS_PATH)
             search_result["cluster"] = get_cluster_labels(search_result, kmeans)
         else:
             search_result["cluster"] = 0
-
-        # Step 6: Final ranking by heuristic + predicted_rating
         search_result["final_score"] = (
             search_result["heuristic_score"] * 0.6 +
             (search_result["predicted_rating"] / 10.0) * 0.4
         )
         final = search_result.sort_values("final_score", ascending=False).head(top_n)
-
-    # ─── Results ────────────────────────────────────────────────────────────────
     st.markdown(f"### Top {top_n} Recommendations")
     st.caption(f"CSP filtered: **{len(csp_result)}** movies -> Search ({algorithm}): **{len(search_result)}** -> Final: **{top_n}**")
-
     for i, (_, row) in enumerate(final.iterrows(), 1):
         with st.container():
             st.markdown(f"""
@@ -322,23 +276,18 @@ if recommend_btn:
                 </small>
             </div>
             """, unsafe_allow_html=True)
-
-    # ─── Charts ─────────────────────────────────────────────────────────────────
     st.markdown("---")
     st.markdown("### Visual Analysis")
-
     col1, col2 = st.columns(2)
-
     with col1:
         fig1 = px.bar(
             final, x="Series_Title", y=["IMDB_Rating", "predicted_rating"],
             barmode="group", title="IMDB vs Predicted Rating",
             labels={"value": "Rating", "variable": "Type"},
-            color_discrete_map={"IMDB_Rating": "#E50914", "predicted_rating": "#f5a623"}
+            color_discrete_map={"IMDB_Rating": "#f2b134", "predicted_rating": "#07111f"}
         )
         fig1.update_xaxes(tickangle=30)
         st.plotly_chart(fig1, width="stretch")
-
     with col2:
         fig2 = px.scatter(
             final, x="Released_Year", y="IMDB_Rating",
@@ -347,8 +296,6 @@ if recommend_btn:
             title="Year vs Rating (bubble = match score, color = cluster)"
         )
         st.plotly_chart(fig2, width="stretch")
-
-    # Heuristic score bar
     fig3 = px.bar(
         final.sort_values("final_score"),
         x="final_score", y="Series_Title",
@@ -356,19 +303,13 @@ if recommend_btn:
         color="final_score", color_continuous_scale="Reds"
     )
     st.plotly_chart(fig3, width="stretch")
-
-    # ─── Data Table ─────────────────────────────────────────────────────────────
     with st.expander("Show Full Data Table"):
         cols = ["Series_Title", "Released_Year", "Genre", "IMDB_Rating",
                 "predicted_rating", "Runtime_min", "heuristic_score", "final_score", "cluster"]
         st.dataframe(final[cols].reset_index(drop=True), width="stretch")
-
 else:
-    # Welcome screen
     st.info("Set your preferences in the sidebar and click Recommend Movies.\n\n"
             "Tip: Click Train AI Model first to enable ANN predictions.")
-
-    # Dataset overview
     st.markdown("### Dataset Overview")
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Total Movies", len(df))
@@ -378,5 +319,5 @@ else:
 
     fig = px.histogram(df, x="IMDB_Rating", nbins=30,
                        title="Distribution of IMDB Ratings",
-                       color_discrete_sequence=["#E50914"])
+                       color_discrete_sequence=["#f2b134"])
     st.plotly_chart(fig, width="stretch")
