@@ -24,20 +24,20 @@ Python, Streamlit, Pandas, NumPy, Scikit-learn, PyTorch / TensorFlow, Plotly
 
 ## 📂 Project Structure
 
-##### movie_recommender/
-##### │── app.py
-##### │── requirements.txt
-##### │── data/
-##### │   └── imdb_dataset.csv
-##### │── modules/
-##### │   ├── csp.py
-##### │   ├── search.py
-##### │   ├── heuristic.py
-##### │   ├── ml_model.py
-##### │── utils/
-##### │   └── helpers.py
-##### │── models/
-##### │   └── trained_model.pth
+Movie Recommendation System/
+├── app.py
+├── requirements.txt
+├── data/
+│ └── imdb_dataset.csv
+├── modules/
+│ ├── csp.py
+│ ├── search.py
+│ ├── heuristic.py
+│ └── ml_model.py
+├── utils/
+│ └── helpers.py
+└── models/
+└── trained_model.pth
 
 ---
 
