@@ -44,7 +44,7 @@ Movie Recommendation System/
 
 ## Dataset
 
-Uses IMDb Top Movies dataset containing:
+Uses IMDb Top Movies dataset from kaggle containing:
 - Movie Title  
 - Genre  
 - Year  
