@@ -18,7 +18,7 @@ An intelligent AI-based Movie Recommendation System that combines classical AI t
 
 ## Tech Stack
 
-Python, Streamlit, Pandas, NumPy, Scikit-learn, PyTorch, Plotly, Joblib
+Python, Streamlit, Pandas, NumPy, Scikit-learn, PyTorch, Joblib
 
 ---
 
