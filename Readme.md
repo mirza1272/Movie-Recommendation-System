@@ -74,7 +74,7 @@ streamlit run app.py
 
 ---
 
-## Working Flow
+## Working Flow of Project
 
 1. User enters preferences (genre, year, rating, duration)  
 2. CSP filters valid movies  
